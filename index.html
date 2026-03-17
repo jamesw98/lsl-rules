@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lightspeed Saber — Scoring One Sheet</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --c-bg: #0d0f14;
+      --c-surface: #161922;
+      --c-border: #2a2d38;
+      --c-text: #e8eaf0;
+      --c-muted: #8b8fa8;
+      --c-0: #4a4a5a;
+      --c-1: #2563eb;
+      --c-3: #059669;
+      --c-5: #d97706;
+      --c-penalty-minor: #dc2626;
+      --c-penalty-major: #7c3aed;
+    }
+
+    html {
+      background: var(--c-bg);
+    }
+
+    body {
+      color: var(--c-text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 24px 16px 48px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--c-text);
+    }
+    header p {
+      color: var(--c-muted);
+      margin-top: 4px;
+      font-size: 0.9rem;
+    }
+
+    /* ── Definitions ── */
+    .definitions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 36px;
+    }
+    .def-pill {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 0.85rem;
+    }
+    .def-pill strong { color: var(--c-text); }
+    .def-pill span { color: var(--c-muted); }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--c-muted);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    /* ── Point group ── */
+    .point-group {
+      margin-bottom: 32px;
+    }
+    .point-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .point-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      border: 2px solid;
+    }
+    .point-badge.pts-0 { color: var(--c-0); border-color: var(--c-0); }
+    .point-badge.pts-1 { color: var(--c-1); border-color: var(--c-1); }
+    .point-badge.pts-3 { color: var(--c-3); border-color: var(--c-3); }
+    .point-badge.pts-5 { color: var(--c-5); border-color: var(--c-5); }
+
+    .point-label {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    /* ── Cards grid ── */
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+    }
+    .card {
+      width: 240px;
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-accent {
+      height: 3px;
+    }
+    .pts-0 .card-accent { background: var(--c-0); }
+    .pts-1 .card-accent { background: var(--c-1); }
+    .pts-3 .card-accent { background: var(--c-3); }
+    .pts-5 .card-accent { background: var(--c-5); }
+
+    .card-body {
+      padding: 14px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .card-desc {
+      color: var(--c-muted);
+      font-size: 0.82rem;
+    }
+
+    /* ── Diagram ── */
+    .diagram-placeholder,
+    .card-img {
+      width: 100%;
+      height: 140px;
+      border-radius: 8px;
+      margin-top: auto;
+      display: block;
+    }
+    .diagram-placeholder {
+      border: 1px dashed var(--c-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--c-border);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .card-img {
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* ── Penalties ── */
+    .penalties-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+    }
+    .penalty-group {
+      width: 340px;
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .penalty-group-header {
+      padding: 10px 16px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .penalty-group-header.minor { background: color-mix(in srgb, var(--c-penalty-minor) 15%, transparent); color: var(--c-penalty-minor); }
+    .penalty-group-header.major { background: color-mix(in srgb, var(--c-penalty-major) 15%, transparent); color: var(--c-penalty-major); }
+
+    .penalty-list {
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .penalty-item { }
+    .penalty-name {
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+    .penalty-name.minor { color: var(--c-penalty-minor); }
+    .penalty-name.major { color: var(--c-penalty-major); }
+    .penalty-desc {
+      color: var(--c-muted);
+      font-size: 0.8rem;
+      margin-top: 2px;
+    }
+
+    hr.section-divider {
+      border: none;
+      border-top: 1px solid var(--c-border);
+      margin: 32px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Lightspeed Saber</h1>
+    <p>Scoring &amp; Penalties Reference</p>
+  </header>
+
+  <!-- Definitions -->
+  <div class="definitions">
+    <div class="def-pill">
+      <strong>En-route</strong><br>
+      <span>Attack has started &amp; blade is ≤ 90° arc</span>
+    </div>
+    <div class="def-pill">
+      <strong>Direct</strong><br>
+      <span>Hit landed without touching opponent's blade during the hit</span>
+    </div>
+  </div>
+
+  <!-- ── SCORING ── -->
+  <p class="section-title">Scoring</p>
+
+  <!-- 0 Points -->
+  <div class="point-group pts-0">
+    <div class="point-header">
+      <div class="point-badge pts-0">0</div>
+      <div class="point-label">No Points Awarded</div>
+    </div>
+    <div class="cards">
+
+      <div class="card">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <div class="card-title">Simultaneous</div>
+          <div class="card-desc">Both fencers hit at roughly the same time.</div>
+          <img class="card-img" src="images/simul.jpg" alt="Simultaneous diagram">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <div class="card-title">Ambiguous</div>
+          <div class="card-desc">Both fencers acted, but the exchange was too messy for the referee to determine what happened.</div>
+          <img class="card-img" src="images/ambiguous.jpg" alt="Ambiguous diagram">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 1 Point -->
+  <div class="point-group pts-1">
+    <div class="point-header">
+      <div class="point-badge pts-1">1</div>
+      <div class="point-label">1 Point</div>
+    </div>
+    <div class="cards">
+
+      <div class="card">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <div class="card-title">Indirect</div>
+          <div class="card-desc">I hit you, but as I hit you I made contact with your saber's blade.</div>
+          <img class="card-img" src="images/indirect.jpg" alt="Indirect diagram">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <div class="card-title">First Contact</div>
+          <div class="card-desc">I hit you, but you also hit me. My blade made contact first.</div>
+          <img class="card-img" src="images/first.png" alt="First Contact diagram">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <div class="card-title">Headshot Override</div>
+          <div class="card-desc">You hit me below the knee first, but I hit your head at the same time or second — en-route.</div>
+          <div class="diagram-placeholder">diagram</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 3 Points -->
+  <div class="point-group pts-3">
+    <div class="point-header">
+      <div class="point-badge pts-3">3</div>
+      <div class="point-label">3 Points</div>
+    </div>
+    <div class="cards">
+
+      <div class="card">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <div class="card-title">Clean Contact</div>
+          <div class="card-desc">I hit you. You didn't hit me.</div>
+          <img class="card-img" src="images/clean.png" alt="Clean Contact diagram">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <div class="card-title">Intercept</div>
+          <div class="card-desc">I made a direct hit to you first, and you hit me, but your attack was not en-route.</div>
+          <img class="card-img" src="images/intercept.jpg" alt="Intercept diagram">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <div class="card-title">Headshot</div>
+          <div class="card-desc">I made a direct hit to your head first, or cleanly.</div>
+          <img class="card-img" src="images/headshot.png" alt="Headshot diagram">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 5 Points -->
+  <div class="point-group pts-5">
+    <div class="point-header">
+      <div class="point-badge pts-5">5</div>
+      <div class="point-label">5 Points</div>
+    </div>
+    <div class="cards">
+
+      <div class="card">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <div class="card-title">Return</div>
+          <div class="card-desc">You attacked me. I made a defensive blade action (parry, beat, deflector, shield, etc.) against the attack, then followed up with a direct hit.</div>
+          <img class="card-img" src="images/return.png" alt="Return diagram">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <div class="card-title">Pre-return</div>
+          <div class="card-desc">I attacked you. In response, you attacked me, which I then defend with a successful defensive blade action.</div>
+          <img class="card-img" src="images/return.png" alt="Pre-Return diagram">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ── PENALTIES ── -->
+  <p class="section-title">Penalties</p>
+
+  <div class="penalties-grid">
+
+    <div class="penalty-group">
+      <div class="penalty-group-header minor">Minor</div>
+      <div class="penalty-list">
+        <div class="penalty-item">
+          <div class="penalty-name minor">Threat</div>
+          <div class="penalty-desc">Any action that threatens an illegal action or presents danger. Examples: point in line, rising attacks below the waist, holding, excessive power that <em>does not hit</em>.</div>
+        </div>
+        <div class="penalty-item">
+          <div class="penalty-name minor">Power</div>
+          <div class="penalty-desc">Excessive force that makes contact but does not cause injury. Example: a hit to the hand that pushes through because of late retraction.</div>
+        </div>
+        <div class="penalty-item">
+          <div class="penalty-name minor">Hazard</div>
+          <div class="penalty-desc">Illegal contact that was accidental and does not cause injury. Examples: unintentional stab to the hand, grazing with the tip during a cut.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="penalty-group">
+      <div class="penalty-group-header major">Major</div>
+      <div class="penalty-list">
+        <div class="penalty-item">
+          <div class="penalty-name major">Repeated Power</div>
+          <div class="penalty-desc">Given when a fencer receives a second, third, or fourth Power call in the same match.</div>
+        </div>
+        <div class="penalty-item">
+          <div class="penalty-name major">Menace</div>
+          <div class="penalty-desc">Any action that is unsafe, meant to intimidate an opponent, or is deliberately brutal.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
